@@ -1,1 +1,2 @@
-# store.stem
+# stem
+http://store.steampowered.com/#
