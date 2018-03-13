@@ -1,3 +1,74 @@
+// 跨域请求
+function callbackfn(data){
+	for(var i in data){
+		var name=data[i].name
+		// console.log(name)
+		var url=data[i].url
+		// console.log(url)
+		var game=data[i].gameId;
+		var isSale=data[i].isSale;
+		var discount=data[i].discount;
+		var originPrice=data[i].originPrice;
+		var price=data[i].price;
+		var imgUrl=data[i].imgUrl;
+		var platform=data[i].platform;
+		var date=data[i].date;
+		console.log(date)
+		var year=date.split("-")[0]
+		var month=date.split('-')[1]
+		var day=date.split('-')[2]
+		var evaluate=data[i].evaluate;
+		var label=data[i].label;
+		var newBOx=$(".final").eq(0).clone();
+		$(".box").eq(0).css({
+			display:"none"
+		})
+		newBOx.show()
+		// 改变游戏名称
+		newBOx.find(".gameName").html(name);
+		newBOx.find(".text .gameName").html(name);
+		newBOx.find(".section .date").html(year+"年"+month+"月"+day+"日")
+		ori=newBOx.find(".original").html(originPrice)
+		now=newBOx.find(".current").html(price);
+		newBOx.find("date").html(evaluate)
+		newBOx.find(".range").html(((ori-now)/ori)*100)
+		console.log(newBOx.find(".range"))
+		// 改变左上角图片
+		for(var j in imgUrl){
+			newBOx.find(".picture img").eq(j).attr("src",data[i].imgUrl[j])
+			newBOx.find(".picture a").eq(j).attr("src",data[i].url[j])
+			newBOx.find(".img img").eq(j).attr("src",data[i].imgUrl[j])
+		}
+		newBOx.appendTo(".one")
+		$(".lunbo").eq(0).find(".bigBox.one .box").mouseenter(function(){
+			var $imgImgList = $(this).find(".img img")	//找到中间的大图片
+			var $pickureImgList = $(this).find(".picture a")	//找到右侧的小图片
+			$pickureImgList.mouseenter(function(){
+				var p = $(this).index()
+				$imgImgList.closest(".img").css({background:"none"})
+				$imgImgList.hide()
+				for(var a=0; a<$imgImgList.length;a++){
+					$imgImgList.eq(a).stop()
+				}
+				$imgImgList.eq(p).fadeIn()
+			})
+			$pickureImgList.mouseleave(function(){
+				$imgImgList.hide()
+				$imgImgList.closest(".img").css({background:""})
+			})
+		})
+	}
+}
+window.onload=function(){
+	// 创建script
+	var script=document.createElement("script")
+	// 设置src属性
+	script.setAttribute("src","http://192.168.1.100:81?callback=callbackfn");
+	// 插入页面
+	document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+
 // active侧边栏加小图片
 for(var a=0;a<$(".activeText").find("i").length;a++){
 	$(".activeText").find("i")[a].style.backgroundPosition = -16*a+"px"+" 0px"

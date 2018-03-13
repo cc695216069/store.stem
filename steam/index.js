@@ -11,19 +11,56 @@ function callbackfn(data){
 		var originPrice=data[i].originPrice;
 		var price=data[i].price;
 		var imgUrl=data[i].imgUrl;
-
 		var platform=data[i].platform;
+		console.log(platform)
 		var date=data[i].date;
+		// console.log(date)
+		var year=date.split("-")[0]
+		var month=date.split('-')[1]
+		var day=date.split('-')[2]
 		var evaluate=data[i].evaluate;
+		console.log(evaluate)
 		var label=data[i].label;
 		var newBOx=$(".box").eq(0).clone();
 		$(".box").eq(0).css({
 			display:"none"
 		})
+		// 平台
+
 		newBOx.show()
+		// 改变游戏名称
 		newBOx.find(".gameName").html(name);
+		newBOx.find(".first").html(name);
+		// newBOx.find(".section .date").html(year+"年"+month+"月"+day+"日")
+		newBOx.find(".date").html(date)
+		console.log(newBOx.find(".date"))
+		// newBOx.find("date").html(evaluate)
+		// 评价
+		var arr=["好评如潮","特别好评","多半好评","褒贬不一","多半差评","差评如潮","无评论"]
+		for(var m in arr){
+			if(evaluate-1==m){
+				newBOx.find(".zhuse").html(m);
+			}
+		}
+		// 价格的整理
+		if(discount==0){
+			newBOx.find(".jiawei .range").html("")
+		}else{
+			newBOx.find(".jiawei .range").html(discount*100+"%")
+		}
+		
+		for(var n in label){
+			newBOx.find(".biaoqian span").eq(n).html(label[n])
+		}
+		// console.log(newBOx.find(".jiawei .range").html(discount))
+		// 改变左上角图片
 		for(var j in imgUrl){
 			newBOx.find(".picture img").eq(j).attr("src",data[i].imgUrl[j])
+			newBOx.find(".picture a").eq(j).attr("src",data[i].url[j])
+			newBOx.find(".img img").eq(j).attr("src",data[i].imgUrl[j])
+			newBOx.find(".img ").css({
+				backgroundImage:"url"+"("+imgUrl[0]+")"
+			})
 		}
 		newBOx.appendTo(".one")
 		$(".lunbo").eq(0).find(".bigBox.one .box").mouseenter(function(){
@@ -44,6 +81,7 @@ function callbackfn(data){
 			})
 		})
 	}
+	$(".box").eq(0).remove()
 }
 window.onload=function(){
 	// 创建script
@@ -54,14 +92,19 @@ window.onload=function(){
 	document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-
-
 // 之前写的
 // active侧边栏加小图片
 for(var a=0;a<$(".activeText").find("i").length;a++){
 	$(".activeText").find("i")[a].style.backgroundPosition = -16*a+"px"+" 0px"
 }
 
+// function blockage(){
+// 	for(var a=0;a<$(".lunbo").length;a++){
+// 		var createSpan = $("<span></span>")
+// 		createSpan.attr("index",a)	
+// 		createSpan.appendTo($(".dot"))
+// 	}
+// }
 // 初始化轮播图
 $(".lunbo").find(".bigBox .box").hide()//隐藏所有的,boxList
 
@@ -100,7 +143,6 @@ function rightCode(){
 		}
 	}
 }
-
 $(".arrowsRight").click(function(){
 	seekElement(this)
 	rightCode()
