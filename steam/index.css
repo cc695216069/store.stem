@@ -502,19 +502,22 @@ li{
 	color: #ddd;
 	margin-bottom: 10px;
 }
-.zhuSe{
-	color: #66c0f4;
-	padding-right: 5px;
-}
-.biaoqian{
+.estimate{
+	height: 25px;
+	overflow: hidden;
 	padding-top: 5px;
 }
-.biaoqian span{
-	margin-right:5px;
+.estimate span{
+	display: inline-block;
+	margin:3px;
 	padding: 2px 5px;
 	background-color: #aaa;
 	border-radius: 3px;
 	color: #e5e5e5;
+}
+.zhuSe{
+	color: #66c0f4;
+	padding-right: 5px;
 }
 
 
@@ -543,27 +546,7 @@ li{
 	width: 616px;
 	height: 353px;
 }
-.final .img{
-	background: url(images/final.jpg) no-repeat;
-}
-.boxi .img{
-	background: url(images/boxi.jpg) no-repeat;
-}
-.hizi .img{
-	background: url(images/hizi.jpg) no-repeat;
-}
-.nba .img{
-	background: url(images/nba.jpg) no-repeat;
-}
-.slay .img{
-	background: url(images/slay.jpg) no-repeat;
-}
-.sub .img{
-	background: url(images/sub.jpg) no-repeat;
-}
-.sword .img{
-	background: url(images/sword.jpg) no-repeat;
-}
+
 .box .img a{
 	display: block;
 	height: 353px;

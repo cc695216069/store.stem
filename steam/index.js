@@ -60,14 +60,12 @@ function callbackfn(data){
 					color:"#b9a074"
 				})
 			}
-			if(evaluate==1){
+			if(evaluate<4){
 				newBOx.find(".pingjia").css({
-					color:"#e21918"
+					color:"skyblue"
 				})
 			}
 		}
-
-
 
 		// 篇数加逗号的处理
 		var sum=String(amount)
@@ -96,23 +94,24 @@ function callbackfn(data){
 		}
 
 		// 弹出框下面标签的处理
-		for(var n in label){
+		for(var n=0;n<label.length;n++){
 			var newspan=$("<span></span>")
 			newspan.html(label[n])
-			newspan.appendTo($(".biaoqian").eq(i))
-			//得到所有插入的span标签 
-			// newspanList=$(".biaoqian").eq(i).find("span");
-			// newspanList.eq(n).html(label[n])
+            //将所有的(newspan)元素插入到(estimate)里面去
+            newspan.appendTo(newBOx.find('.estimate').eq(0))   
 		}	
+		newBOx.find('.url img').eq(0).css({
+			display : "block" 
+		})
 		// 改变左上角图片
 		for(var j in imgUrl){
 			newBOx.find(".picture img").eq(j).attr("src",data[i].imgUrl[j])
 			newBOx.find(".picture a").eq(j).attr("src",data[i].url[j])
 			newBOx.find(".img img").eq(j).attr("src",data[i].imgUrl[j])
 			newBOx.find(".four img").eq(j).attr("src",data[i].imgUrl[j])
-			newBOx.find(".img ").css({
-				backgroundImage:"url"+"("+imgUrl[0]+")"
-			})
+			// newBOx.find(".img ").css({
+			// 	backgroundImage:"url"+"("+imgUrl[0]+")"
+			// })
 		}
 		newBOx.appendTo(".one")
 	}
@@ -127,6 +126,35 @@ window.onload=function(){
 	// 插入页面
 	document.getElementsByTagName('head')[0].appendChild(script);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -150,9 +178,12 @@ function diaoyong(){
 			$createSpan.attr("index",b)	//设置非法属性
 			$createSpan.appendTo($(".lunbo").eq(a).find(".dot"))
 		}
+
 		$(".lunbo").eq(a).find(".dot span").eq(0).addClass("focus")
 		$(".lunbo").eq(a).find(".bigBox .box").eq(0).show()//默认显示box
 	}
+
+
 
 	//寻找当前的元素
 	function seekElement(point){
@@ -215,7 +246,7 @@ function diaoyong(){
 			$boxList = $(".lunbo").eq(0).find(".bigBox .box")//找到第一个轮播图的$boxList集合
 			$dotList = $(".lunbo").eq(0).find(".dot span")//找到第一个轮播图的$squareList集合
 			rightCode()
-		},3000)
+		},2000)
 	}
 	autoPlay()
 	$(".lunbo").eq(0).mouseenter(function(){
@@ -243,6 +274,7 @@ function diaoyong(){
 		$pickureImgList.mouseleave(function(){
 			$imgImgList.hide()
 			$imgImgList.closest(".img").css({background:""})
+			$imgImgList.eq(0).fadeIn() //让第一个默认显示
 		})
 	})
 
@@ -329,6 +361,9 @@ $(".somalList").mouseenter(function(){
 	$somalList.eq(q).addClass("hove")
 	$youList.eq(q).fadeIn()
 })
+
+
+
 
 
 
