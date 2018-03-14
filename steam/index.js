@@ -2,86 +2,122 @@
 function callbackfn(data){
 	for(var i in data){
 		var name=data[i].name
-		// console.log(name)
 		var url=data[i].url
-		// console.log(url)
-		var game=data[i].gameId;
 		var isSale=data[i].isSale;
 		var discount=data[i].discount;
 		var originPrice=data[i].originPrice;
 		var price=data[i].price;
 		var imgUrl=data[i].imgUrl;
-		var platform=data[i].platform;
-		console.log(platform)
 		var date=data[i].date;
-		// console.log(date)
 		var year=date.split("-")[0]
 		var month=date.split('-')[1]
 		var day=date.split('-')[2]
 		var evaluate=data[i].evaluate;
-		console.log(evaluate)
+		var amount=data[i].evaluatingCount
+		var platform=data[i].platform
 		var label=data[i].label;
+		// 克隆大盒子
 		var newBOx=$(".box").eq(0).clone();
 		$(".box").eq(0).css({
 			display:"none"
 		})
-		// 平台
-
 		newBOx.show()
+		// 游戏地址的处理
+		// newBOx.find("url")
+		// console.log(newBOx)
+		// 平台的处理
+		for(var p in platform){
+			if(platform[p]=="Windows"){
+				newBOx.find(".fuhao .win").css({
+					display:"inline-block"
+				})
+				
+			}
+			if(platform[p]=="Mac OS"){
+				newBOx.find(".fuhao .mac").css({
+					display:"inline-block"
+				})
+			}
+			if(platform[p]=="Steam"){
+				newBOx.find(" .fuhao .linux").css({
+					display:"inline-block"
+				})
+			}
+		}
+		
 		// 改变游戏名称
 		newBOx.find(".gameName").html(name);
 		newBOx.find(".first").html(name);
-		// newBOx.find(".section .date").html(year+"年"+month+"月"+day+"日")
-		newBOx.find(".date").html(date)
-		console.log(newBOx.find(".date"))
-		// newBOx.find("date").html(evaluate)
+		newBOx.find(".section .date").html(year+"年"+month+"月"+day+"日")
 		// 评价
 		var arr=["好评如潮","特别好评","多半好评","褒贬不一","多半差评","差评如潮","无评论"]
 		for(var m in arr){
 			if(evaluate-1==m){
-				newBOx.find(".zhuse").html(m);
+				newBOx.find(".pingjia").html(arr[m]);
+			}
+			if(evaluate==4){
+				newBOx.find(".pingjia").css({
+					color:"#b9a074"
+				})
+			}
+			if(evaluate==1){
+				newBOx.find(".pingjia").css({
+					color:"#e21918"
+				})
 			}
 		}
+
+
+
+		// 篇数加逗号的处理
+		var sum=String(amount)
+		function jiafuhao(str){
+			if(str.length<=3){
+				return str
+			}else{
+				// 递归（函数自己调用自己）
+				return jiafuhao(str.substr(0,str.length-3))+","+str.substr(str.length-3)
+			}
+		}
+		newBOx.find(".count").html(jiafuhao(sum))
 		// 价格的整理
+		newBOx.find(".original").html("￥"+originPrice)
+		newBOx.find(".current").html("￥"+price)
+		// 折扣的处理
 		if(discount==0){
-			newBOx.find(".jiawei .range").html("")
+			newBOx.find(".jiawei .range").css({
+				display:"none"
+			})
+			newBOx.find(".jiawei .original").css({
+				display:"none"
+			})
 		}else{
 			newBOx.find(".jiawei .range").html(discount*100+"%")
 		}
-		
+
+		// 弹出框下面标签的处理
 		for(var n in label){
-			newBOx.find(".biaoqian span").eq(n).html(label[n])
-		}
-		// console.log(newBOx.find(".jiawei .range").html(discount))
+			var newspan=$("<span></span>")
+			newspan.html(label[n])
+			newspan.appendTo($(".biaoqian").eq(i))
+			//得到所有插入的span标签 
+			// newspanList=$(".biaoqian").eq(i).find("span");
+			// newspanList.eq(n).html(label[n])
+		}	
 		// 改变左上角图片
 		for(var j in imgUrl){
 			newBOx.find(".picture img").eq(j).attr("src",data[i].imgUrl[j])
 			newBOx.find(".picture a").eq(j).attr("src",data[i].url[j])
 			newBOx.find(".img img").eq(j).attr("src",data[i].imgUrl[j])
+			newBOx.find(".four img").eq(j).attr("src",data[i].imgUrl[j])
 			newBOx.find(".img ").css({
 				backgroundImage:"url"+"("+imgUrl[0]+")"
 			})
 		}
 		newBOx.appendTo(".one")
-		$(".lunbo").eq(0).find(".bigBox.one .box").mouseenter(function(){
-			var $imgImgList = $(this).find(".img img")	//找到中间的大图片
-			var $pickureImgList = $(this).find(".picture a")	//找到右侧的小图片
-			$pickureImgList.mouseenter(function(){
-				var p = $(this).index()
-				$imgImgList.closest(".img").css({background:"none"})
-				$imgImgList.hide()
-				for(var a=0; a<$imgImgList.length;a++){
-					$imgImgList.eq(a).stop()
-				}
-				$imgImgList.eq(p).fadeIn()
-			})
-			$pickureImgList.mouseleave(function(){
-				$imgImgList.hide()
-				$imgImgList.closest(".img").css({background:""})
-			})
-		})
 	}
 	$(".box").eq(0).remove()
+	diaoyong()
 }
 window.onload=function(){
 	// 创建script
@@ -92,168 +128,168 @@ window.onload=function(){
 	document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-// 之前写的
+
+
+
+
 // active侧边栏加小图片
 for(var a=0;a<$(".activeText").find("i").length;a++){
 	$(".activeText").find("i")[a].style.backgroundPosition = -16*a+"px"+" 0px"
 }
 
-// function blockage(){
-// 	for(var a=0;a<$(".lunbo").length;a++){
-// 		var createSpan = $("<span></span>")
-// 		createSpan.attr("index",a)	
-// 		createSpan.appendTo($(".dot"))
-// 	}
-// }
+
 // 初始化轮播图
-$(".lunbo").find(".bigBox .box").hide()//隐藏所有的,boxList
+function diaoyong(){
+	$(".lunbo").find(".bigBox .box").hide()//隐藏所有的,boxList
 
-for(var a=0;a<$(".lunbo").length;a++){
-	var $cont = $(".lunbo").eq(a).find(".bigBox .box").length
-	//初始化span点击小方块
-	for(var b=0;b<$cont;b++){
-		var $createSpan = $("<span></span>")//创建
-		$createSpan.attr("index",b)	//设置非法属性
-		$createSpan.appendTo($(".lunbo").eq(a).find(".dot"))
+	for(var a=0;a<$(".lunbo").length;a++){
+		var $cont = $(".lunbo").eq(a).find(".bigBox .box").length
+		//初始化span点击小方块
+		for(var b=0;b<$cont;b++){
+			var $createSpan = $("<span></span>")//创建
+			$createSpan.attr("index",b)	//设置非法属性
+			$createSpan.appendTo($(".lunbo").eq(a).find(".dot"))
+		}
+		$(".lunbo").eq(a).find(".dot span").eq(0).addClass("focus")
+		$(".lunbo").eq(a).find(".bigBox .box").eq(0).show()//默认显示box
 	}
-	$(".lunbo").eq(a).find(".dot span").eq(0).addClass("focus")
-	$(".lunbo").eq(a).find(".bigBox .box").eq(0).show()//默认显示box
-}
 
-//寻找当前的元素
-function seekElement(point){
-	$lunbo = $(point).closest(".lunbo")//找到当前的父级lunbo
-	$boxList = $lunbo.find(".bigBox .box")//找到当前的boxList集合
-	$dotList = $lunbo.find(".dot span")//找到当前的$squareList集合
-}
+	//寻找当前的元素
+	function seekElement(point){
+		$lunbo = $(point).closest(".lunbo")//找到当前的父级lunbo
+		$boxList = $lunbo.find(".bigBox .box")//找到当前的boxList集合
+		$dotList = $lunbo.find(".dot span")//找到当前的$squareList集合
+	}
 
-// 向右点击的代码段
-function rightCode(){
-	for(var a=0;a<$boxList.length;a++){
-		if($boxList[a].style.display == "block"){
-			$boxList.eq(a).hide()
-			$dotList.eq(a).removeClass("focus")
-			$boxList.eq(a+1).fadeIn()
-			$dotList.eq(a+1).addClass("focus")
-			if(a == $boxList.length-1){
-				$boxList.eq(0).fadeIn()
-				$dotList.eq(0).addClass("focus")
+	// 向右点击的代码段
+	function rightCode(){
+		for(var a=0;a<$boxList.length;a++){
+			if($boxList[a].style.display == "block"){
+				$boxList.eq(a).hide()
+				$dotList.eq(a).removeClass("focus")
+				$boxList.eq(a+1).fadeIn()
+				$dotList.eq(a+1).addClass("focus")
+				if(a == $boxList.length-1){
+					$boxList.eq(0).fadeIn()
+					$dotList.eq(0).addClass("focus")
+				}
+				return;
 			}
-			return;
 		}
 	}
-}
-$(".arrowsRight").click(function(){
-	seekElement(this)
-	rightCode()
-})
-
-$(".arrowsLeft").click(function(){
-	seekElement(this)
-	for(var a=0;a<$boxList.length;a++){
-		if($boxList[a].style.display == "block"){
-			$boxList.eq(a).hide()
-			$dotList.eq(a).removeClass("focus")
-			$boxList.eq(a-1).fadeIn()
-			$dotList.eq(a-1).addClass("focus")
-			if(a == 0){
-				$boxList.eq($boxList.length-1).fadeIn()
-				$dotList.eq($boxList.length-1).addClass("focus")
-			}
-			return;
-		}
-	}
-})
-
-// squareList点击事件
-$(".lunbo").find(".dot span").click(function(){
-	seekElement(this)
-	var n = $(this).index()
-	$boxList.hide()
-	$dotList.removeClass("focus")
-	$boxList.eq(n).fadeIn()
-	$dotList.eq(n).addClass("focus")
-})
-
-// 第一个大盒子自动播放
-function autoPlay(){
-	play = setInterval(function(){
-		$boxList = $(".lunbo").eq(0).find(".bigBox .box")//找到第一个轮播图的$boxList集合
-		$dotList = $(".lunbo").eq(0).find(".dot span")//找到第一个轮播图的$squareList集合
+	$(".arrowsRight").click(function(){
+		seekElement(this)
 		rightCode()
-	},3000)
-}
-autoPlay()
-$(".lunbo").eq(0).mouseenter(function(){
-	clearInterval(play)
-})
-$(".lunbo").eq(0).mouseleave(function(){
-	autoPlay()	
-})
-
-// 第一个轮播图右边的小图片，鼠标移上主要核心
-$(".lunbo").eq(0).find(".bigBox.one .box").mouseenter(function(){
-	var $imgImgList = $(this).find(".img img")	//找到中间的大图片
-	var $pickureImgList = $(this).find(".picture a")	//找到右侧的小图片
-	$pickureImgList.mouseenter(function(){
-		var p = $(this).index()
-		$imgImgList.closest(".img").css({background:"none"})
-		$imgImgList.hide()
-		//动画队列问题，JQuery内部提供了停止动画队列的方法 “ stop() ”
-		//问题描述：不停地快速划过$somalList并且停止时，之前的动画尚未执行完成，隐藏无效，会多出现几个你不想让他出现的怪东西
-		for(var a=0; a<$imgImgList.length;a++){
-			$imgImgList.eq(a).stop()
-		}
-		$imgImgList.eq(p).fadeIn()
 	})
-	$pickureImgList.mouseleave(function(){
-		$imgImgList.hide()
-		$imgImgList.closest(".img").css({background:""})
-	})
-})
 
-
-//鼠标移上出现弹框  代码段
-// age3: 鼠标要经过的对象集合
-// age4: 要显示的区块名(String)
-// age5: 现实的区块里面的要自动播放的图片集合(string)
-function  revealPopover(age3,age4,age5){
-	var x=0;
-	age3.mouseenter(function(){
-		//让右边section小区块显示
-		$(this).find(age4).fadeIn()
-		//获取四张图片
-		var $fourList = $(this).find(age4).find(age5)
-		//小图片计时器，永不停息
-		somalImg = setInterval(function(){
-			$fourList.hide()
-			if(x==$fourList.length-1){
-				x = 0
-			}else{
-				x++
+	$(".arrowsLeft").click(function(){
+		seekElement(this)
+		for(var a=0;a<$boxList.length;a++){
+			if($boxList[a].style.display == "block"){
+				$boxList.eq(a).hide()
+				$dotList.eq(a).removeClass("focus")
+				$boxList.eq(a-1).fadeIn()
+				$dotList.eq(a-1).addClass("focus")
+				if(a == 0){
+					$boxList.eq($boxList.length-1).fadeIn()
+					$dotList.eq($boxList.length-1).addClass("focus")
+				}
+				return;
 			}
-			$fourList.eq(x).fadeIn(200)
-		},2000)
+		}
 	})
-}
-//鼠标离开隐藏弹框  代码段
-// age3: 鼠标要经过的对象集合
-// age4: 要显示的区块名(String)
-function  concealPopover(age3,age4){
-	age3.mouseleave(function(){
-		$(this).find(age4).fadeOut(300)
-		$(this).mouseleave(function(){
-			$(this).find(age4).fadeOut()
+
+	// squareList点击事件
+	$(".lunbo").find(".dot span").click(function(){
+		seekElement(this)
+		var n = $(this).index()
+		$boxList.hide()
+		$dotList.removeClass("focus")
+		$boxList.eq(n).fadeIn()
+		$dotList.eq(n).addClass("focus")
+	})
+
+	// 第一个大盒子自动播放
+	function autoPlay(){
+		play = setInterval(function(){
+			$boxList = $(".lunbo").eq(0).find(".bigBox .box")//找到第一个轮播图的$boxList集合
+			$dotList = $(".lunbo").eq(0).find(".dot span")//找到第一个轮播图的$squareList集合
+			rightCode()
+		},3000)
+	}
+	autoPlay()
+	$(".lunbo").eq(0).mouseenter(function(){
+		clearInterval(play)
+	})
+	$(".lunbo").eq(0).mouseleave(function(){
+		autoPlay()	
+	})
+
+	// 第一个轮播图右边的小图片，鼠标移上主要核心
+	$(".lunbo").eq(0).find(".bigBox.one .box").mouseenter(function(){
+		var $imgImgList = $(this).find(".img img")	//找到中间的大图片
+		var $pickureImgList = $(this).find(".picture a")	//找到右侧的小图片
+		$pickureImgList.mouseenter(function(){
+			var p = $(this).index()
+			$imgImgList.closest(".img").css({background:"none"})
+			$imgImgList.hide()
+			//动画队列问题，JQuery内部提供了停止动画队列的方法 “ stop() ”
+			//问题描述：不停地快速划过$somalList并且停止时，之前的动画尚未执行完成，隐藏无效，会多出现几个你不想让他出现的怪东西
+			for(var a=0; a<$imgImgList.length;a++){
+				$imgImgList.eq(a).stop()
+			}
+			$imgImgList.eq(p).fadeIn()
 		})
-		clearInterval(somalImg)
+		$pickureImgList.mouseleave(function(){
+			$imgImgList.hide()
+			$imgImgList.closest(".img").css({background:""})
+		})
 	})
+
+
+	//鼠标移上出现弹框  代码段
+	// age3: 鼠标要经过的对象集合
+	// age4: 要显示的区块名(String)
+	// age5: 现实的区块里面的要自动播放的图片集合(string)
+	function  revealPopover(age3,age4,age5){
+		var x=0;
+		age3.mouseenter(function(){
+			//让右边section小区块显示
+			$(this).find(age4).fadeIn()
+			//获取四张图片
+			var $fourList = $(this).find(age4).find(age5)
+			//小图片计时器，永不停息
+			somalImg = setInterval(function(){
+				$fourList.hide()
+				if(x==$fourList.length-1){
+					x = 0
+				}else{
+					x++
+				}
+				$fourList.eq(x).fadeIn(200)
+			},2000)
+		})
+	}
+	//鼠标离开隐藏弹框  代码段
+	// age3: 鼠标要经过的对象集合
+	// age4: 要显示的区块名(String)
+	function  concealPopover(age3,age4){
+		age3.mouseleave(function(){
+			$(this).find(age4).fadeOut(300)
+			$(this).mouseleave(function(){
+				$(this).find(age4).fadeOut()
+			})
+			clearInterval(somalImg)
+		})
+	}
+
+	$pass = $(".lunbo .bigBox .box").find(".section").parent()
+	$section = $pass.find(".section")
+	$fourList = $section.find(".four img")
+	revealPopover($pass,$section,$fourList)
+	concealPopover($pass,$section)
 }
 
-$pass = $(".lunbo .bigBox .box").find(".section").parent()
-$section = $pass.find(".section")
-$fourList = $section.find(".four img")
-revealPopover($pass,$section,$fourList)
-concealPopover($pass,$section)
 
 
 //*******************选项卡   新品与热门商品************************

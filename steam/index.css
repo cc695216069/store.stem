@@ -38,7 +38,7 @@ li{
 
 /*小图标*/
 .win,.mac,.linux{
-	display: block;
+	display: none;
 	width: 20px;
 	height: 20px;
 }
@@ -68,7 +68,9 @@ li{
 .current{
 	color: #acdbf5;
 }
+.biaoqian{
 
+}
 
 
 
@@ -508,6 +510,7 @@ li{
 	padding-top: 5px;
 }
 .biaoqian span{
+	margin-right:5px;
 	padding: 2px 5px;
 	background-color: #aaa;
 	border-radius: 3px;
@@ -645,11 +648,8 @@ li{
 }
 .jiawei a span{
 	float: left;
-	font-size: 12px;	
+	font-size: 12px;
 }
-
-
-
 
 .bigBox.two{
 	height: 394px;
@@ -1034,6 +1034,7 @@ li{
 	color: #384959;
 }
 .somalList.hove .win{
+
 	background: url(images/winhei.png);
 }
 .somalList.hove .mac{
