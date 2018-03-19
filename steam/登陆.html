@@ -155,11 +155,15 @@
 							<form action="">
 								<div class="inputBox">
 									<p>Steam 帐户名称</p>
-									<input type="text">
+									<input type="text" id="userName">
 								</div>
 								<div class="inputBox">
 									<p>密码</p>
-									<input type="password">
+									<input type="password" id="password">
+									<p>
+										<input type="checkbox" id="free">
+										<label for="free">七天内免登录</label>
+									</p>
 								</div>
 							</form>
 						</div>
@@ -171,7 +175,7 @@
 					</div>
 					<div class="dengluBottom">
 						<div class="dengluLeft">
-							<a href="" class="zhuSe xiangqingAnNiu dianji">登录</a>
+							<a class="zhuSe xiangqingAnNiu dianji" id="btn">登录</a>
 						</div>
 						<div class="dengluRight">
 							<a href="" class="zhuSe xiangqingAnNiu dianji">加入 Stem</a>
@@ -280,6 +284,41 @@
 			</ul>
 		</div>
 	</div>
-	<script src="stem.js"></script>
+	<script src="convenient.js"></script>
+	<script>
+		var btn = document.getElementById("btn")
+		var free = document.getElementById("free")
+		var userName = document.getElementById("userName")
+		var password = document.getElementById("password")
+		btn.onclick = function(){
+			// console.log(1)
+			var user = userName.value
+			var cryptogram = password.value
+			if(user !== "" && cryptogram !== ""){
+				if(free.checked){
+					alert(0)
+					setCookie({userName:user},7)
+					setCookie({password:cryptogram},7)
+				}
+				else{
+					alert(1)
+					removeCookie("userName")
+					removeCookie("password")
+				}
+			}
+		}
+		if(!getCookie("userName")){
+			userName.value = ""
+			password.value = ""	
+		}
+		else{
+			userName.value = getCookie("userName")
+			password.value = getCookie("password")
+		}
+		// removeCookie("userName")
+		// removeCookie("password")
+
+	</script>
+
 </body>
 </html>

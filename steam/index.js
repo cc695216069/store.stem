@@ -2,7 +2,8 @@
 function callbackfn(data){
 	for(var i in data){
 		var name=data[i].name
-		var url=data[i].url
+		var gameId=data[i].gameId;
+		 url=data[i].url
 		var isSale=data[i].isSale;
 		var discount=data[i].discount;
 		var originPrice=data[i].originPrice;
@@ -18,13 +19,19 @@ function callbackfn(data){
 		var label=data[i].label;
 		// 克隆大盒子
 		var newBOx=$(".box").eq(0).clone();
-		$(".box").eq(0).css({
-			display:"none"
-		})
-		newBOx.show()
+
+		newBOx.addClass("newbox");
+		newBOx.appendTo($(".one"))
+		var newBOxlist=$(".one").find(".newbox")
 		// 游戏地址的处理
-		// newBOx.find("url")
-		// console.log(newBOx)
+		newBOxlist.eq(i).find("a").attr("href","javascript:void(0)")
+		// 隐藏的盒子显示（方法一）
+		newBOxlist.eq(0).show()
+		// 给a链接设置非法属性
+		newBOxlist.eq(i).find("a").attr("gameid",gameId)
+		// 隐藏的盒子显示（方法二）
+		// newBOx.show()
+
 		// 平台的处理
 		for(var p in platform){
 			if(platform[p]=="Windows"){
@@ -113,10 +120,53 @@ function callbackfn(data){
 			// 	backgroundImage:"url"+"("+imgUrl[0]+")"
 			// })
 		}
-		newBOx.appendTo(".one")
 	}
 	$(".box").eq(0).remove()
+
+	/*详情页数据*/
+	var Url=$(".one").find(".newbox").find("a")
+	// console.log(Url)
+	var Str=""
+	// 设置非法属性判断是否点击过
+	var isOnclick=false;
+	//a链接点击事件 
+	Url.click(function(){
+		alert(1)
+		if($("head").find("script").length==3){
+			Newscript.remove()
+		}
+		Newscript=$("<script></script>")
+		Newscript.appendTo($('head'))
+		// 获取当前点击游戏的Id
+		var Id=$(this).attr("gameid");
+		// console.log( Id)
+		// 获取当前点击游戏的链接
+		var url=$(this).attr("href")
+		var game=$(this).closest('.box').find(".gameName").html()
+		console.log(game)
+		var arr=Str.split(",")
+		// 判断是否已点击过
+		if(!isOnclick){
+			Str=Str+Id+",";
+			Newscript.attr("src","http://192.168.1.100:81?callback=callbackfn3&gameId="+Str)
+		}
+		setCookie({gameName:game},10)
+		setCookie({url:url},10)
+	})
 	diaoyong()
+}
+// 详情页回调函数
+function callbackfn3(d){
+	for(var i in d){
+		var Name=d[d.length-1].name
+		var lasturl=d[d.length-1].url
+	}
+	// 自动生成a链接
+	var creatA=$("<a></a>")
+	console.log(creatA)
+	creatA.html(Name)
+	creatA.attr("href",lasturl)
+	$(".activeText").find(".empty").prepend(creatA)
 }
 window.onload=function(){
 	// 创建script
@@ -126,8 +176,6 @@ window.onload=function(){
 	// 插入页面
 	document.getElementsByTagName('head')[0].appendChild(script);
 }
-
-
 
 
 

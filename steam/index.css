@@ -219,7 +219,6 @@ li{
 	display: block;
 	color: #66c0f4;
 	padding: 3px 0;
-
 }
 .activeText i{
 	position: relative;
@@ -232,6 +231,14 @@ li{
 }
 .activeText a:hover{
 	color: #fff;
+}
+.empty a{
+	display:block;
+	height:18px;
+	/*CSS实现单行、多行文本溢出显示省略号（…）*/
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
 }
 /*********************侧边栏完**************************/
 
@@ -2565,7 +2572,7 @@ li.no>span{
 .inputBox{
 	margin-bottom: 15px;
 }
-.inputBox input{
+.inputBox>input{
 	background-color: rgba( 0, 0, 0, 0.2 );
 	color: #fff;
 	border: 1px solid #000;
